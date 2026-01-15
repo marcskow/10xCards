@@ -1,0 +1,39 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { CardBrowser } from "@/components/CardBrowser";
+import { setService } from "@/lib/services/set.service";
+import { cardService } from "@/lib/services/card.service";
+import type { SetDto, CardDto } from "@/types";
+
+const { id } = Astro.params;
+const { supabase, user } = Astro.locals;
+
+if (!user) {
+  return Astro.redirect("/401");
+}
+
+let set: SetDto | null = null;
+let cards: CardDto[] = [];
+
+if (id) {
+  try {
+    set = await setService.getSetById(supabase, user.id, id);
+    if (set) {
+      cards = await cardService.getCardsBySetId(supabase, user.id, id);
+    }
+  } catch (error) {
+    console.error(`Failed to fetch data for set ${id}:`, error);
+  }
+}
+
+if (!set) {
+  return Astro.redirect("/404");
+}
+---
+
+<Layout title={`Viewing Set: ${set.name} - 10xCards`}>
+  <main class="container mx-auto py-8">
+    <CardBrowser client:load initialSet={set} initialCards={cards} />
+  </main>
+</Layout>
+

@@ -1,0 +1,51 @@
+### Global Variables
+@baseUrl = http://localhost:3000/api
+
+### 1. Create a New Set
+# Sends a CreateSetCommand to create a new flashcard deck.
+# This script automatically saves the returned ID to the 'generatedSetId' variable.
+POST {{baseUrl}}/sets
+Content-Type: application/json
+
+{
+  "name": "English - Medical Terms 2"
+}
+
+> {%
+    client.test("Set created successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+    // Saves the ID for use in GET, PATCH, and DELETE requests below
+    client.global.set("generatedSetId", response.body.id);
+%}
+
+###
+
+### 2. List All Sets (Pagination)
+# Retrieves a paginated list of sets for the hardcoded dev user.
+GET {{baseUrl}}/sets?page=1&limit=10
+Accept: application/json
+
+###
+
+### 3. Get a Specific Set
+# Retrieves details for the set created in step #1.
+GET {{baseUrl}}/sets/{{generatedSetId}}
+Accept: application/json
+
+###
+
+### 4. Update Set Name
+# Updates the name using the UpdateSetCommand structure.
+PATCH {{baseUrl}}/sets/{{generatedSetId}}
+Content-Type: application/json
+
+{
+  "name": "English - Advanced Medical Terms"
+}
+
+###
+
+### 5. Delete a Set
+# Permanently removes the set and associated cards via cascading delete.
+DELETE {{baseUrl}}/sets/{{generatedSetId}}

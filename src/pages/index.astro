@@ -1,0 +1,18 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { SetsList } from "@/components/SetsList";
+import type { PaginatedResponse, SetDto } from "@/types";
+
+// Initial data is now fetched client-side by the SetsList component.
+// This ensures consistency and avoids issues with server-side data fetching context.
+const initialData: PaginatedResponse<SetDto> = {
+  data: [],
+  pagination: { page: 1, limit: 20, total: 0 },
+};
+---
+
+<Layout title="My Sets - 10xCards">
+  <main class="container mx-auto py-8">
+    <SetsList client:load initialData={initialData} />
+  </main>
+</Layout>

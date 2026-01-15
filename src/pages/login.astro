@@ -1,0 +1,9 @@
+---
+import AuthLayout from "@/layouts/AuthLayout.astro";
+import AuthForm from "@/components/AuthForm";
+---
+
+<AuthLayout title="Sign In - 10xCards">
+  <AuthForm client:load initialMode="login" />
+</AuthLayout>
+
