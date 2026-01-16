@@ -42,7 +42,6 @@ export function SetsList({ initialData }: SetsListProps) {
       <header className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">My Sets</h1>
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <CreateSetDialog onCreated={handleSetCreated}>
             <Button>New Set</Button>
           </CreateSetDialog>
